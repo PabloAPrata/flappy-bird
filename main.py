@@ -24,7 +24,26 @@ start_image = pygame.image.load("assets/start.png")
 # Game
 # Indica a velocidade que o chão rolará
 scroll_speed = 2
+bird_start_position = (100, 250)
 
+class Bird(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = bird_images[0]
+        self.rect = self.image.get_rect()
+        self.rect.center = bird_start_position
+        self.image_index = 0
+        self.vel = 0
+        self.flap = False
+        self.alive = True
+
+    def update(self, user_input):
+        # Animar o pássaro
+        if self.alive:
+            self.image_index += 1
+        if self.image_index >= 30:
+            self.image_index = 0
+        self.image = bird_images[self.image_index // 10]
 
 class Ground(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -49,6 +68,10 @@ def quit_game():
 
 # Função main do jogo
 def main():
+
+    # Instancia o pássaro
+    bird = pygame.sprite.GroupSingle()
+    bird.add(Bird())
 
     # Instancia o chão inicial
     x_pos_ground, y_pos_ground = 0, 520
