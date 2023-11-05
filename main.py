@@ -52,11 +52,11 @@ class Ground(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
 
-        def update(self):
-            # Move o chão
-            self.rect.x -= scroll_speed
-            if self.rect.x <= -win_width:
-                self.kill()
+    def update(self):
+        # Move o chão
+        self.rect.x -= scroll_speed
+        if self.rect.x <= -win_width:
+            self.kill()
 
 # Sair do Jogo
 def quit_game():
