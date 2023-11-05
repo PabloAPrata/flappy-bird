@@ -39,8 +39,7 @@ class Bird(pygame.sprite.Sprite):
 
     def update(self, user_input):
         # Animar o pássaro
-        if self.alive:
-            self.image_index += 1
+        self.image_index += 1
         if self.image_index >= 30:
             self.image_index = 0
         self.image = bird_images[self.image_index // 10]
@@ -67,11 +66,13 @@ def quit_game():
 
 
 # Função main do jogo
+# Função main do jogo
 def main():
 
     # Instancia o pássaro
     bird = pygame.sprite.GroupSingle()
-    bird.add(Bird())
+    bird_sprite = Bird()  # Crie uma instância do Bird
+    bird.add(bird_sprite)
 
     # Instancia o chão inicial
     x_pos_ground, y_pos_ground = 0, 520
@@ -94,9 +95,11 @@ def main():
 
         # Desenha - tubos, pássaro e o chão
         ground.draw(window)
+        bird.draw(window)
 
         # Atualiza - tubos, pássaro e o chão
         ground.update()
+        bird_sprite.update(None)  # Passe None como o argumento user_input para bird.update()
 
         clock.tick(60)  # Define o framerate para 60.
         pygame.display.update()
