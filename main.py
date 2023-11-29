@@ -30,6 +30,7 @@ bird_start_position = (100, 250)
 score = 0
 font = pygame.font.SysFont('Arial', 20)
 game_stopped = True
+player_record = 0
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self):
@@ -100,6 +101,8 @@ class Pipe(pygame.sprite.Sprite):
 
         # Score
         global score
+        global player_record
+
         if self.pipe_type == 'bottom':
             if bird_start_position[0] > self.rect.topleft[0] and not self.passed:
                 self.enter = True
@@ -108,6 +111,9 @@ class Pipe(pygame.sprite.Sprite):
             if self.enter and self.exit and not self.passed:
                 self.passed = True
                 score += 1
+                if score > player_record:
+                    player_record = score
+
 
 
 class Ground(pygame.sprite.Sprite):
@@ -173,7 +179,11 @@ def main():
 
         # Show Score
         score_text = font.render('Score: ' + str(score), True, pygame.Color(255, 255, 255))
-        window.blit(score_text, (20, 20))
+        window.blit(score_text, (20, 45))
+
+        # Show Record
+        player_record_text = font.render('Record: ' + str(player_record), True, pygame.Color(255, 255, 255))
+        window.blit(player_record_text, (20, 20))
 
         # Update - Pipes, Ground and Bird
         if bird.sprite.alive:
