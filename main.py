@@ -40,7 +40,6 @@ class Bird(pygame.sprite.Sprite):
         self.rect.center = bird_start_position
         self.image_index = 0
         self.vel = 0
-        self.flap = False
         self.alive = True
         self.delta_x = 0
         self.delta_y = 0
@@ -53,10 +52,7 @@ class Bird(pygame.sprite.Sprite):
             self.image_index = 0
         self.image = bird_images[self.image_index // 10]
 
-        # Input
-        if user_input[pygame.K_SPACE] and not self.flap and self.rect.y > 0 and self.alive:
-            self.flap = True
-            self.vel = -7
+        self.vel = -7
 
         # Movimento horizontal
         if user_input[pygame.K_LEFT]:
@@ -69,8 +65,10 @@ class Bird(pygame.sprite.Sprite):
         # Movimento vertical
         if user_input[pygame.K_UP]:
             self.delta_y = self.delta_y - 0.8
+            self.image = pygame.transform.rotate(self.image, self.vel * -7)
         elif user_input[pygame.K_DOWN]:
             self.delta_y = self.delta_y + 0.8
+            self.image = pygame.transform.rotate(self.image, self.vel * +7)
         else:
             self.delta_y = 0
 
@@ -165,23 +163,23 @@ def main():
         # User Input
         user_input = pygame.key.get_pressed()
 
-        # Draw Background
+        # Desenha Background
         window.blit(skyline_image, (0, 0))
 
         # Spawn Ground
         if len(ground) <= 2:
             ground.add(Ground(win_width, y_pos_ground))
 
-        # Draw - Pipes, Ground and Bird
+        # Desenha - Canos, Chão e Pássaro
         pipes.draw(window)
         ground.draw(window)
         bird.draw(window)
 
-        # Show Score
+        # Mostra Score
         score_text = font.render('Score: ' + str(score), True, pygame.Color(255, 255, 255))
         window.blit(score_text, (20, 45))
 
-        # Show Record
+        # Mostra Record
         player_record_text = font.render('Record: ' + str(player_record), True, pygame.Color(255, 255, 255))
         window.blit(player_record_text, (20, 20))
 
@@ -191,7 +189,7 @@ def main():
             ground.update()
             bird.update(user_input)
 
-        # Collision Detection
+        # Detecção de colisão
         collision_pipes = pygame.sprite.spritecollide(bird.sprites()[0], pipes, False)
         collision_ground = pygame.sprite.spritecollide(bird.sprites()[0], ground, False)
         if collision_pipes or collision_ground:
